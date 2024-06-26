@@ -1,6 +1,9 @@
 import json
+import os
 
 from django.shortcuts import render
+
+MODULE_DIR = os.path.dirname(__file__)
 
 
 def index(request):
@@ -11,10 +14,10 @@ def index(request):
 
 
 def products(request):
-    with open('mainapp/fixtures/products.json', 'r', encoding='utf-8') as f:
-        goods = json.loads(f.read())
+    file_path = os.path.join(MODULE_DIR, 'fixtures/products.json')
     context = {
         'title': 'GeekShop - Каталог',
-        'goods': goods
+        'sections' : ['Новинки', 'Одежда', 'Обувь', 'Аксессуары', 'Подарки'],
+        'goods': [i['fields'] for i in json.load(open(file_path, encoding='utf-8'))]
     }
     return render(request, 'mainapp/products.html', context)
